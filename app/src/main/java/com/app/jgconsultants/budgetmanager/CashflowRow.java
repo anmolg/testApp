@@ -38,9 +38,11 @@ public class CashflowRow extends ListActivity { //ActionBarActivity {
             allItems[i] = item;
         }
 
-        setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_cashflow_row, allItems));
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, allItems);
+        setListAdapter(adapter);
+        //setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_cashflow_row, allItems));
 
-        ListView listView = getListView();
+       /* ListView listView = getListView();
         listView.setTextFilterEnabled(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -49,7 +51,7 @@ public class CashflowRow extends ListActivity { //ActionBarActivity {
                 Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
 
             }
-        });
+        });*/
     }
 
     @Override
