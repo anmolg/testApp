@@ -30,15 +30,18 @@ public class CashflowRow extends ListActivity { //ActionBarActivity {
         BudgetManagerHelper bmDbHelper = new BudgetManagerHelper(getApplicationContext());
         List<FinanceItem> lfi = bmDbHelper.getAllFinanceItem();
 
-        String[] allItems = new String[lfi.size()];
+        /*String[] allItems = new String[lfi.size()];
 
         for (int i = 0; i < lfi.size(); i++) {
             FinanceItem fi = lfi.get(i);
             String item = fi.getItem();
             allItems[i] = item;
         }
+*/
+        FinanceItem[] arrayFinanceItem = new FinanceItem[lfi.size()];
+        arrayFinanceItem = lfi.toArray(arrayFinanceItem);
 
-        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, allItems);
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, arrayFinanceItem);
         setListAdapter(adapter);
         //setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_cashflow_row, allItems));
 /*
