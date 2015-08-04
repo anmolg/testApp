@@ -41,14 +41,15 @@ public class CashflowRow extends ListActivity { //ActionBarActivity {
         MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, allItems);
         setListAdapter(adapter);
         //setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_cashflow_row, allItems));
-
-       /* ListView listView = getListView();
-        listView.setTextFilterEnabled(true);
+/*
+       ListView listView = getListView();
+       //listView.setTextFilterEnabled(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_LONG);
 
             }
         });*/
@@ -74,5 +75,11 @@ public class CashflowRow extends ListActivity { //ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        String item = (String) getListAdapter().getItem(position);
+        Toast.makeText(this, item + "selected", Toast.LENGTH_LONG).show();
     }
 }

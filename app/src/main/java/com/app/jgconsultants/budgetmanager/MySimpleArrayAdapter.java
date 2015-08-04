@@ -32,5 +32,4 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         textView.setText(items[position]);
         return rowView;
     }
-
 }
