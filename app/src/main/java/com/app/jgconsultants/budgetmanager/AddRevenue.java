@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import java.security.PublicKey;
+import java.util.Calendar;
 
 
 public class AddRevenue extends ActionBarActivity {
@@ -46,28 +47,31 @@ public class AddRevenue extends ActionBarActivity {
     }
 
     public void addRevenue(View view) {
-        BudgetManagerHelper bmDbHelper = new BudgetManagerHelper(getApplicationContext());
-        SQLiteDatabase db = bmDbHelper.getWritableDatabase();
 
-
-        EditText editTextRevenue = (EditText) findViewById(R.id.revenue_amount);
-        String addRevenueString = editTextRevenue.getText().toString();
-
+        EditText editTextRevenueAmount = (EditText) findViewById(R.id.revenue_amount);
         EditText editTextItem = (EditText) findViewById(R.id.revenue_item);
-        String addItemString = editTextItem.getText().toString();
+        EditText editTextCategory = (EditText) findViewById(R.id.revenue_category);
+        EditText editTextLocation = (EditText) findViewById(R.id.revenue_location);
 
-        ContentValues values = new ContentValues();
-        values.put(BudgetManagerHelper.COLUMN_NAME_ITEM, addItemString);
-        values.put(BudgetManagerHelper.COLUMN_NAME_AMOUNT, addRevenueString);
-        values.put(BudgetManagerHelper.COLUMN_NAME_DATE, System.currentTimeMillis());
+        String addRevenueString= editTextRevenueAmount.getText().toString();
+        String fiItem = editTextItem.getText().toString();
+        String fiCategory = editTextCategory.getText().toString();
+        String fiLocation = editTextLocation.getText().toString();
 
-        long newRowId;
-        newRowId = db.insert(BudgetManagerHelper.TABLE_NAME, null, values);
-        db.close();
+        Double fiAmount = Double.parseDouble(addRevenueString);
 
-        Float addRevenue = Float.parseFloat(addRevenueString);
+        int fiYear = Calendar.getInstance().get(Calendar.YEAR);
+        int fiMonth = Calendar.getInstance().get(Calendar.MONTH);
+        int fiDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+        FinanceItem expense = new FinanceItem(fiCategory, fiLocation, fiItem, fiYear, fiMonth, fiDay, fiAmount, true);
+
+        BudgetManagerHelper db = new BudgetManagerHelper(this);
+
+        db.addFinanceItem(expense);
+
         Intent intent = new Intent(this, OpeningPage.class);
-        intent.putExtra(ADD_REVENUE, addRevenue);
+        intent.putExtra(ADD_REVENUE, fiAmount);
         startActivity(intent);
     }
 }

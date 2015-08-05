@@ -83,6 +83,6 @@ public class CashflowRow extends ListActivity { //ActionBarActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         String item = (String) getListAdapter().getItem(position);
-        Toast.makeText(this, item + "selected", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "selected", Toast.LENGTH_LONG).show();
     }
 }
