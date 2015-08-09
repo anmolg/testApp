@@ -18,10 +18,6 @@ import java.util.List;
 
 public class CashflowRow extends ListActivity { //ActionBarActivity {
 
-    static final String[] FRUITS = new String[] { "Apple", "Avocado", "Banana",
-            "Blueberry", "Coconut", "Durian", "Guava", "Kiwifruit",
-            "Jackfruit", "Mango", "Olive", "Pear", "Sugar-apple", "Test 1", "Test 2" };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,32 +26,11 @@ public class CashflowRow extends ListActivity { //ActionBarActivity {
         BudgetManagerHelper bmDbHelper = new BudgetManagerHelper(getApplicationContext());
         List<FinanceItem> lfi = bmDbHelper.getAllFinanceItem();
 
-        /*String[] allItems = new String[lfi.size()];
-
-        for (int i = 0; i < lfi.size(); i++) {
-            FinanceItem fi = lfi.get(i);
-            String item = fi.getItem();
-            allItems[i] = item;
-        }
-*/
         FinanceItem[] arrayFinanceItem = new FinanceItem[lfi.size()];
         arrayFinanceItem = lfi.toArray(arrayFinanceItem);
 
         MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, arrayFinanceItem);
         setListAdapter(adapter);
-        //setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_cashflow_row, allItems));
-/*
-       ListView listView = getListView();
-       //listView.setTextFilterEnabled(true);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_LONG);
-
-            }
-        });*/
     }
 
     @Override

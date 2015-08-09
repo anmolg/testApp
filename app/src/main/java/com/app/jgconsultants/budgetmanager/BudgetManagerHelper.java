@@ -143,5 +143,67 @@ public class BudgetManagerHelper extends SQLiteOpenHelper implements BaseColumns
 
     }
 
+    public List<FinanceItem> getAllCurrentMonthFinanceItem() {
+        List<FinanceItem> fiList = new ArrayList<FinanceItem>();
+
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+        int eDay = Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_MONTH);
+        int lDay = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        Calendar initialDate = Calendar.getInstance();
+        initialDate.set(currentYear, currentMonth, eDay);
+        Long initialPutDate = initialDate.getTimeInMillis();
+
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(currentYear, currentMonth, lDay);
+        Long endPutDate = endDate.getTimeInMillis();
+
+        String selectAllQuery = "SELECT "   + "*" + " " +
+                                "FROM "     + TABLE_NAME + " " +
+                                "WHERE "    + COLUMN_NAME_DATE + " >= " + initialPutDate + " " +
+                                    "AND "  + COLUMN_NAME_DATE + " <= " + endPutDate;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectAllQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String strID = cursor.getString(0);
+                Long date = cursor.getLong(1);
+                String category = cursor.getString(2);
+                String item = cursor.getString(3);
+                String location = cursor.getString(4);
+                int amountType = cursor.getInt(5);
+                String strAmount = cursor.getString(6);
+
+                Integer id = Integer.parseInt(strID);
+                Calendar itemDate = Calendar.getInstance();
+                itemDate.setTimeInMillis(date);
+                Integer year = itemDate.get(Calendar.YEAR);
+                Integer month = itemDate.get(Calendar.MONTH);
+                Integer day = itemDate.get(Calendar.DAY_OF_YEAR);
+
+                Boolean addMoney;
+
+                if (amountType == 1) {
+                    addMoney = true;
+                } else {
+                    addMoney = false;
+                }
+
+                Double amount = Double.parseDouble(strAmount);
+
+
+                FinanceItem fi = new FinanceItem(id, category, location, item, year, month, day, amount, addMoney);
+                fiList.add(fi);
+
+            } while (cursor.moveToNext());
+        }
+
+        return fiList;
+
+    }
+
 
 }

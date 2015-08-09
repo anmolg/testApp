@@ -11,11 +11,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
 
 public class OpeningPage extends ActionBarActivity {
 
     private static String DEFAULT_VALUE = "0";
     private double totalBudget;
+    private static double closeBudget = -1.00;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,9 @@ public class OpeningPage extends ActionBarActivity {
             totalBudget = totalBudget - addExpense;
         }
 
+        if (totalBudget == closeBudget) {
+            calculateMonthlyBudget();
+        }
         updateTotalBudget();
 
     }
@@ -60,7 +66,13 @@ public class OpeningPage extends ActionBarActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(getString(R.string.saved_total_budget), Double.toString(totalBudget));
         editor.commit();
+    }
 
+    private void closeTotalBudget() {
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.all_shared_pref), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.saved_total_budget), Double.toString(closeBudget));
+        editor.commit();
     }
 
     @Override
@@ -88,37 +100,43 @@ public class OpeningPage extends ActionBarActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        saveTotalBudget();
+        closeTotalBudget();
     }
 
     public void addRevenue(View view) {
         Intent intent = new Intent(this, AddRevenue.class);
-        //intent.putExtra(CURRENT_BUDGET, totalBudget);
         startActivity(intent);
-
-        /*EditText editText = (EditText) findViewById(R.id.change_balance);
-        String toChangeString = editText.getText().toString();
-        Float toChange = Float.parseFloat(toChangeString);
-        totalBudget = totalBudget + toChange;
-        updateTotalBudget();*/
-        //saveTotalBudget();
 
     }
 
     public void addExpense(View view) {
         Intent intent = new Intent(this, AddExpense.class);
         startActivity(intent);
-        /*EditText editText = (EditText) findViewById(R.id.change_balance);
-        String toChangeString = editText.getText().toString();
-        Float toChange = Float.parseFloat(toChangeString);
-        totalBudget = totalBudget - toChange;
-        updateTotalBudget();*/
-        //saveTotalBudget();
     }
 
     public void seeCashflow(View view) {
         Intent intent = new Intent(this, CashflowRow.class);
         startActivity(intent);
+    }
+
+    private void calculateMonthlyBudget() {
+        BudgetManagerHelper bmDbHelper = new BudgetManagerHelper(getApplicationContext());
+        List<FinanceItem> lfi = bmDbHelper.getAllCurrentMonthFinanceItem();
+
+        totalBudget = 0;
+
+        for (int i = 0; i < lfi.size(); i++) {
+            Double amount = lfi.get(i).getAmount();
+            if (lfi.get(i).isAddMoney()) {
+                totalBudget += amount;
+            }
+            else {
+                totalBudget -= amount;
+            }
+        }
+
+        totalBudget = (double) Math.round(totalBudget * 100) / 100;
+
     }
 
 }

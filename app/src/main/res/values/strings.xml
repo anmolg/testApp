@@ -2,7 +2,7 @@
     <string name="app_name">BudgetManager</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="current_balance">Your total balance</string>
+    <string name="current_balance">Your total balance for the month:</string>
     <string name="add_revenue">Add Revenue</string>
     <string name="add_expense">Add Expense</string>
     <string name="change_balance">You are going to change your balance by:</string>
